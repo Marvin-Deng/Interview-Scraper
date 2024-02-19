@@ -1,0 +1,12 @@
+# Python
+__pycache__
+
+# Environment
+venv
+.env
+
+# Driver
+chromedriver.exe
+
+# Test Output
+output.txt
