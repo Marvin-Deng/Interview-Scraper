@@ -10,3 +10,6 @@ chromedriver.exe
 
 # Test Output
 output.txt
+
+# DB
+db.sqlite3
