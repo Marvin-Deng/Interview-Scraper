@@ -44,6 +44,24 @@ def click_element_by_data_test(data_test_value: str, driver: WebDriver) -> None:
     except NoSuchElementException:
         print(f"Error: Element with data-test='{data_test_value}' not found.")
 
+def get_elements_by_css(css: str, driver: WebDriver) -> None:
+
+    css_selector = css
+    if ' ' in css:
+        css_selector = '.' + '.'.join(css.split())
+
+    try:
+        elements = driver.find_elements(By.CSS_SELECTOR, css_selector)
+        elements_list = []
+
+        for element in elements:
+            elements_list.append(element.text)
+            
+        return elements_list
+
+    except Exception as e:
+        print(f"An error occurred while trying to extract elements: {e}")
+
 
 def export_formatted_html(soup: BeautifulSoup, file_name: str = "output.txt") -> None:
     """Exports formatted HTML from a BeautifulSoup object to a text file."""

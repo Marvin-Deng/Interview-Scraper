@@ -9,7 +9,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-from utils import export_formatted_html, enter_input_by_id, click_button_by_css, click_element_by_data_test
+from utils import (
+    export_formatted_html,
+    enter_input_by_id,
+    click_button_by_css,
+    click_element_by_data_test,
+    get_elements_by_css
+)
 
 
 class GlassdoorScraper:
@@ -59,8 +65,21 @@ class GlassdoorScraper:
             position, "filter.jobTitleFTS-JobTitleAC", self.driver)
         click_element_by_data_test("ContentFiltersFindBtn", self.driver)
 
+    def get_interview_experience(self) -> None:
+        time.sleep(3)
+        experience_list = get_elements_by_css(
+            "css-w00cnv mt-xsm mb-std", self.driver)
+        print(experience_list)
+        print(len(experience_list))
+
+    def get_interview_questions(self) -> None:
+        question_list = get_elements_by_css(
+            "d-inline-block mb-sm", self.driver)
+        print(question_list)
+        print(len(question_list))
+
     @staticmethod
-    def get_interview_questions(company: str, position: str) -> None:
+    def scrape_interview_questions(company: str, position: str) -> None:
         search_url = f"https://www.glassdoor.com/Search/results.htm?keyword={company}"
         scraper = GlassdoorScraper(search_url)
         scraper.install_web_driver()
@@ -68,11 +87,12 @@ class GlassdoorScraper:
         scraper.get_interview_page()
         scraper.login_glassdoor()
         scraper.search_questions_for_position(position)
-        time.sleep(10)
-        # scraper.close_driver()
+        scraper.get_interview_experience()
+        scraper.get_interview_questions()
+        scraper.close_driver()
 
 
 if __name__ == "__main__":
     company = "Amazon"
     position = "Software Engineering Intern"
-    GlassdoorScraper.get_interview_questions(company, position)
+    GlassdoorScraper.scrape_interview_questions(company, position)
