@@ -9,11 +9,10 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 def enter_input_by_id(input_text: str, input_id: str, driver: WebDriver) -> None:
     """Enter info into an input bar given its id."""
     try:
-        email_input = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, input_id))
-        )
-        email_input.clear()
-        email_input.send_keys(input_text)
+        input = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, input_id)))
+        input.clear()
+        input.send_keys(input_text)
     except TimeoutException:
         print(
             f"Timeout: Input with ID '{input_id}' not visible within the wait time.")
