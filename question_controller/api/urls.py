@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import main
+from .views import GlassdoorView
 
 urlpatterns = [
-    path('', main)
+    path('home', GlassdoorView.as_view()),
 ]

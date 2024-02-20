@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+class GlassdoorQuestion(models.Model):
+    date_posted = models.DateField()
+    experience = models.TextField()
+    questions = models.TextField()

@@ -2,7 +2,7 @@
 
 ## Running
 ```shell
-python .\manage.py run server 
+python .\manage.py runserver 
 ```
 
 ## Migrations

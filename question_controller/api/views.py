@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework import generics
+from .models import GlassdoorQuestion
+from .serializers import GlassdoorSerializer
 
-def main(request):
-    return HttpResponse("Hello")
+class GlassdoorView(generics.ListAPIView):
+    queryset = GlassdoorQuestion.objects.all()
+    serializer_class = GlassdoorSerializer

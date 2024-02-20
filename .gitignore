@@ -12,4 +12,5 @@ chromedriver.exe
 output.txt
 
 # DB
+migrations
 db.sqlite3
