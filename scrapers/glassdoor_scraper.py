@@ -2,6 +2,7 @@ import os
 import time
 from typing import Optional
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -9,12 +10,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-from utils import (
+from scraper_utils.clicker_utils import (
     export_formatted_html,
     enter_input_by_id,
     click_button_by_css,
     click_element_by_data_test,
-    get_elements_by_css
+    get_sub_element_by_tag,
+    get_sub_element_by_css,
 )
 
 
@@ -65,18 +67,30 @@ class GlassdoorScraper:
             position, "filter.jobTitleFTS-JobTitleAC", self.driver)
         click_element_by_data_test("ContentFiltersFindBtn", self.driver)
 
-    def get_interview_experience(self) -> None:
-        time.sleep(3)
-        experience_list = get_elements_by_css(
-            "css-w00cnv mt-xsm mb-std", self.driver)
-        print(experience_list)
-        print(len(experience_list))
+    def switch_to_next_interview_page(self):
+        """Shift to the next page"""
+        click_button_by_css("next-icon")
 
-    def get_interview_questions(self) -> None:
-        question_list = get_elements_by_css(
-            "d-inline-block mb-sm", self.driver)
-        print(question_list)
-        print(len(question_list))
+    def parse_interview_questions(self):
+        time.sleep(3)
+        elements = self.driver.find_elements(
+            By.CSS_SELECTOR, '.mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00')
+        
+        interview_objects = []
+        for element in elements:
+            date = get_sub_element_by_tag(element, "time")
+            experience = get_sub_element_by_css(element, "css-w00cnv mt-xsm mb-std")
+            question = get_sub_element_by_css(element, "d-inline-block mb-sm")
+
+            question_data = {
+                "date": date,
+                "experience": experience,
+                "question": question
+            }
+            
+            interview_objects.append(question_data)
+        print(interview_objects)
+        print(len(interview_objects))
 
     @staticmethod
     def scrape_interview_questions(company: str, position: str) -> None:
@@ -87,12 +101,11 @@ class GlassdoorScraper:
         scraper.get_interview_page()
         scraper.login_glassdoor()
         scraper.search_questions_for_position(position)
-        scraper.get_interview_experience()
-        scraper.get_interview_questions()
+        scraper.parse_interview_questions()
         scraper.close_driver()
 
 
 if __name__ == "__main__":
-    company = "Amazon"
+    company = "Google"
     position = "Software Engineering Intern"
     GlassdoorScraper.scrape_interview_questions(company, position)

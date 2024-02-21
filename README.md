@@ -1,6 +1,11 @@
 # Interview Question Web Scraper
 
-## Running
+## Running Scraper
+```shell
+python scrapers/glassdoor_scraper.py
+```
+
+## Running Django App
 ```shell
 python .\manage.py runserver 
 ```
