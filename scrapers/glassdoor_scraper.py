@@ -1,8 +1,8 @@
 import os
+import re
 import time
 from typing import Optional
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,6 +15,10 @@ from scraper_utils.clicker_utils import (
     enter_input_by_id,
     click_button_by_css,
     click_element_by_data_test,
+)
+
+from scraper_utils.getter_utils import (
+    get_all_elements_by_css,
     get_sub_element_by_tag,
     get_sub_element_by_css,
 )
@@ -24,6 +28,8 @@ class GlassdoorScraper:
     def __init__(self, url: str) -> None:
         self.url: str = url
         self.driver: Optional[WebDriver] = None
+        self.curr_page: int = 1
+        self.intervew_page_url: str = ""
 
     def install_web_driver(self) -> None:
         """Installs and initializes the web driver."""
@@ -58,7 +64,6 @@ class GlassdoorScraper:
         enter_input_by_id(os.getenv("PASSWORD"),
                           "hardsellUserPassword", self.driver)
         click_button_by_css("button.Button[type='submit']", self.driver)
-        time.sleep(4)
         print("Logged In!")
 
     def search_questions_for_position(self, position: str) -> None:
@@ -66,20 +71,38 @@ class GlassdoorScraper:
         enter_input_by_id(
             position, "filter.jobTitleFTS-JobTitleAC", self.driver)
         click_element_by_data_test("ContentFiltersFindBtn", self.driver)
+        self.intervew_page_url = self.driver.current_url
 
-    def switch_to_next_interview_page(self):
+    def switch_to_new_page(self, new_page: int) -> None:
         """Shift to the next page"""
-        click_button_by_css("next-icon")
+        url = self.intervew_page_url
+        self.curr_page = new_page
+        if new_page == 1:
+            self.intervew_page_url = re.sub(r"_IP\d+\.htm", ".htm", )
+        elif '.htm' in url:
+            if re.search(r"_IP\d+\.htm", url):
+                self.intervew_page_url = re.sub(
+                    r"_IP\d+\.htm", f"_IP{new_page}.htm", url)
+            else:
+                self.intervew_page_url = re.sub(
+                    r"\.htm", f"_IP{new_page}.htm", url)
+        self.driver.get(self.intervew_page_url)
+        print(f"Switched Pages to {new_page}!")
 
     def parse_interview_questions(self):
-        time.sleep(3)
-        elements = self.driver.find_elements(
-            By.CSS_SELECTOR, '.mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00')
-        
+        """Parse the interview list on the current page"""
+        if (self.curr_page == 1):
+            elements = get_all_elements_by_css(
+                ".mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00", self.driver)
+        else:
+            elements = get_all_elements_by_css(
+                "mt-0 mb-0 my-md-std p-std gd-ui-module css-cup1a5 ec4dwm00", self.driver)
+
         interview_objects = []
         for element in elements:
             date = get_sub_element_by_tag(element, "time")
-            experience = get_sub_element_by_css(element, "css-w00cnv mt-xsm mb-std")
+            experience = get_sub_element_by_css(
+                element, "css-w00cnv mt-xsm mb-std")
             question = get_sub_element_by_css(element, "d-inline-block mb-sm")
 
             question_data = {
@@ -87,7 +110,7 @@ class GlassdoorScraper:
                 "experience": experience,
                 "question": question
             }
-            
+
             interview_objects.append(question_data)
         print(interview_objects)
         print(len(interview_objects))
@@ -101,6 +124,10 @@ class GlassdoorScraper:
         scraper.get_interview_page()
         scraper.login_glassdoor()
         scraper.search_questions_for_position(position)
+        scraper.parse_interview_questions()
+        scraper.switch_to_new_page(2)
+        scraper.parse_interview_questions()
+        scraper.switch_to_new_page(3)
         scraper.parse_interview_questions()
         scraper.close_driver()
 
