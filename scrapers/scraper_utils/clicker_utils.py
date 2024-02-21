@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
+from .helper_utils import parse_css_selector
 from scraper_utils.wait_utils import (
     wait_elements_visible_by_css,
     wait_elements_visible_by_id,
@@ -29,8 +30,7 @@ def enter_input_by_id(input_text: str, input_id: str, driver: WebDriver) -> None
 
 def click_button_by_css(css_selector: str, driver: WebDriver) -> None:
     """Click on the first button matching the css."""
-    if ' ' in css_selector:
-        css_selector = '.'.join(css_selector.split())
+    css_selector = parse_css_selector(css_selector)
     try:
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
