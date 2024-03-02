@@ -31,6 +31,11 @@ class GlassdoorScraper:
         self.curr_page: int = 1
         self.intervew_page_url: str = ""
 
+        self.install_web_driver()
+        self.get_company_overview()
+        self.get_interview_page()
+        self.login_glassdoor()
+
     def install_web_driver(self) -> None:
         """Installs and initializes the web driver."""
         try:
@@ -119,10 +124,6 @@ class GlassdoorScraper:
     def scrape_interview_questions(company: str, position: str) -> None:
         search_url = f"https://www.glassdoor.com/Search/results.htm?keyword={company}"
         scraper = GlassdoorScraper(search_url)
-        scraper.install_web_driver()
-        scraper.get_company_overview()
-        scraper.get_interview_page()
-        scraper.login_glassdoor()
         scraper.search_questions_for_position(position)
         scraper.parse_interview_questions()
         scraper.switch_to_new_page(2)

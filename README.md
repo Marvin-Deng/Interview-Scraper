@@ -1,8 +1,20 @@
 # Interview Question Web Scraper
 
-## Running Scraper
+## Setup
+
+1. Set up a virtual environment
 ```shell
-python scrapers/glassdoor_scraper.py
+python -m venv venv
+```
+
+2. Install requirements
+```shell
+pip install requirements.txt
+```
+
+## Running Scraper
+```shell 
+python dj_api/scrapers/glassdoor_scraper.py
 ```
 
 ## Running Django App
