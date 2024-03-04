@@ -1,19 +1,11 @@
 import os
-import re
-import time
 from datetime import datetime
-from typing import Optional
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-
+from driver import install_web_driver
 
 from scraper_utils.clicker_utils import (
     enter_input_by_id,
     click_button_by_css,
+    click_next_button_by_css,
     click_element_by_data_test,
 )
 
@@ -27,30 +19,18 @@ from scraper_utils.getter_utils import (
 class GlassdoorScraper:
     def __init__(self, url: str) -> None:
         self.url: str = url
-        self.driver: Optional[WebDriver] = None
         self.curr_page: int = 1
-        self.intervew_page_url: str = ""
-
-        self.install_web_driver()
+        self.driver = install_web_driver(url)
+        
         self.get_company_overview()
         self.get_interview_page()
         self.login_glassdoor()
-
-    def install_web_driver(self) -> None:
-        """Installs and initializes the web driver."""
-        try:
-            self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-            wait = WebDriverWait(self.driver, 5)
-            self.driver.get(self.url)
-            wait.until(EC.url_to_be(self.url))
-            print("Page source obtained successfully.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
 
     def close_driver(self) -> None:
         """Closes the web driver."""
         if self.driver:
             self.driver.quit()
+            print("Quitted!")
 
     def get_company_overview(self):
         click_button_by_css("h3.d-none.d-sm-block", self.driver)
@@ -73,28 +53,15 @@ class GlassdoorScraper:
         """Search for interview questions for a specific position."""
         enter_input_by_id(position, "filter.jobTitleFTS-JobTitleAC", self.driver)
         click_element_by_data_test("ContentFiltersFindBtn", self.driver)
-        self.intervew_page_url = self.driver.current_url
 
-    def switch_to_new_page(self, new_page: int) -> None:
+    def switch_to_new_page(self) -> None:
         """Shift to the next page"""
-        url = self.intervew_page_url
-        self.curr_page = new_page
-        if new_page == 1:
-            self.intervew_page_url = re.sub(r"_IP\d+\.htm", ".htm", )
-        elif '.htm' in url:
-            if re.search(r"_IP\d+\.htm", url):
-                self.intervew_page_url = re.sub(r"_IP\d+\.htm", f"_IP{new_page}.htm", url)
-            else:
-                self.intervew_page_url = re.sub(r"\.htm", f"_IP{new_page}.htm", url)
-        self.driver.get(self.intervew_page_url)
-        print(f"Switched Pages to {new_page}!")
+        click_next_button_by_css('[aria-label="Next"]', self.driver)
+        self.curr_page += 1
 
     def parse_interview_questions(self):
         """Parse the interview list on the current page"""
-        if (self.curr_page == 1):
-            elements = get_all_elements_by_css(".mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00", self.driver)
-        else:
-            elements = get_all_elements_by_css("mt-0 mb-0 my-md-std p-std gd-ui-module css-cup1a5 ec4dwm00", self.driver)
+        elements = get_all_elements_by_css(".mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00", self.driver)
 
         interview_objects = []
         for element in elements:
@@ -110,6 +77,7 @@ class GlassdoorScraper:
             }
 
             interview_objects.append(question_data)
+
         print(interview_objects)
         print(len(interview_objects))
         return interview_objects
@@ -125,11 +93,14 @@ class GlassdoorScraper:
         while True:
             try:
                 questions += scraper.parse_interview_questions()
+                print(f"Page: {page}")
                 page += 1
-                scraper.switch_to_new_page(page)
+                scraper.switch_to_new_page()
+
             except Exception as e:
                 print(f"Failed to switch to page {page + 1}: {e}")
                 break
+
         scraper.close_driver()
         return questions
 

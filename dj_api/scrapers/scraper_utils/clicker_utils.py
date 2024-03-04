@@ -34,8 +34,7 @@ def click_button_by_css(css_selector: str, driver: WebDriver) -> None:
     try:
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
-        print(
-            f"Timeout: Button with css '{css_selector}' not clickable within the wait time.")
+        print(f"Timeout: Button with css '{css_selector}' not clickable within the wait time.")
     except NoSuchElementException:
         print(f"Error: Button with css '{css_selector}' not found.")
 
@@ -46,11 +45,21 @@ def click_element_by_data_test(data_test_value: str, driver: WebDriver) -> None:
         css_selector = f'[data-test="{data_test_value}"]'
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
-        print(
-            f"Timeout: Element with data-test='{data_test_value}' not clickable within the wait time.")
+        print(f"Timeout: Element with data-test='{data_test_value}' not clickable within the wait time.")
     except NoSuchElementException:
         print(f"Error: Element with data-test='{data_test_value}' not found.")
 
+
+def click_next_button_by_css(css_selector: str, driver: WebDriver) -> None:
+    """Click on the first button matching the css."""
+    css_selector = parse_css_selector(css_selector)
+    try:
+        wait_elements_clickable_by_css(css_selector, driver)
+    except TimeoutException as e:
+        raise Exception(f"Timeout occured while waiting to click button: {e}")
+    except Exception as e:
+        raise Exception(f"Clicking button failed with error: {e}")
+        
 
 def export_formatted_html(soup: BeautifulSoup, file_name: str = "output.txt") -> None:
     """Exports formatted HTML from a BeautifulSoup object to a text file."""
