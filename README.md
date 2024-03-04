@@ -15,12 +15,12 @@ pip install requirements.txt
 ## Running Scraper
 ```shell
 cd
-python .\dj_api/scrapers/glassdoor_scraper.py
+python dj_api/scrapers/glassdoor_scraper.py
 ```
 
 ## Running Django App
 ```shell
-python .\dj_api/manage.py runserver 
+python dj_api/manage.py runserver 
 ```
 
 ## Migrations

@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 from .helper_utils import parse_css_selector
-from scraper_utils.wait_utils import (
+from .wait_utils import (
     wait_elements_visible_by_css,
     wait_elements_visible_by_id,
     wait_elements_clickable_by_css,
