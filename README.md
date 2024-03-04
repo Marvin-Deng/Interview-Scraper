@@ -13,23 +13,24 @@ pip install requirements.txt
 ```
 
 ## Running Scraper
-```shell 
-python dj_api/scrapers/glassdoor_scraper.py
+```shell
+cd
+python .\dj_api/scrapers/glassdoor_scraper.py
 ```
 
 ## Running Django App
 ```shell
-python .\manage.py runserver 
+python .\dj_api/manage.py runserver 
 ```
 
 ## Migrations
 
 1. Create migration files wiht latest changes
 ```shell
-python .\manage.py makemigrations 
+python .\dj_api/manage.py makemigrations 
 ```
 
 2. Apply changes to the database
 ```shell
-python .\manage.py migrate  
+python .\dj_api/manage.py migrate  
 ```

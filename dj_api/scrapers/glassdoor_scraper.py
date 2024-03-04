@@ -111,7 +111,7 @@ class GlassdoorScraper:
             question = get_sub_element_by_css(element, "d-inline-block mb-sm")
 
             question_data = {
-                "date": date,
+                "date_posted": date,
                 "experience": experience,
                 "question": question
             }
