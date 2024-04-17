@@ -7,14 +7,23 @@
 python -m venv venv
 ```
 
-2. Install requirements
+2. Start the virtual environment
 ```shell
-pip install requirements.txt
+# Windows
+venv\Scripts\activate
+
+# Mac
+source venv/bin/activate
+```
+
+3 Install requirements
+```shell
+pip install -r requirements.txt
 ```
 
 ## Running Scraper
 ```shell
-cd
+cd scrapers
 python dj_api/scrapers/glassdoor_scraper.py
 ```
 
