@@ -1,13 +1,16 @@
 # Interview Question Web Scraper
+Script for scraping interview questions from Glassdoor
 
 ## Setup
 
 1. Set up a virtual environment
+
 ```shell
-python -m venv venv
+python3 -m venv venv
 ```
 
 2. Start the virtual environment
+
 ```shell
 # Windows
 venv\Scripts\activate
@@ -17,29 +20,19 @@ source venv/bin/activate
 ```
 
 3 Install requirements
+
 ```shell
 pip install -r requirements.txt
 ```
 
 ## Running Scraper
+
 ```shell
-cd scrapers
-python dj_api/scrapers/glassdoor_scraper.py
+python3 main.py
 ```
 
-## Running Django App
-```shell
-python dj_api/manage.py runserver 
-```
+## Updating requirements
 
-## Migrations
-
-1. Create migration files wiht latest changes
 ```shell
-python .\dj_api/manage.py makemigrations 
-```
-
-2. Apply changes to the database
-```shell
-python .\dj_api/manage.py migrate  
+pip freeze > requirements.txt
 ```

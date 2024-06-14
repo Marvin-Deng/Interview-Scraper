@@ -16,6 +16,7 @@ def install_web_driver(url) -> None:
     print("Page source obtained successfully.")
     return driver
 
+
 # def install_web_driver(self) -> None:
 #     """Installs and initializes the web driver."""
 #     try:

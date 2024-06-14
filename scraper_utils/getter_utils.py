@@ -13,8 +13,7 @@ def get_all_elements_by_css(css_selector: str, driver: WebDriver) -> list:
     css_selector = parse_css_selector(css_selector)
     try:
         elements = WebDriverWait(driver, 10).until(
-            EC.visibility_of_all_elements_located(
-                (By.CSS_SELECTOR, css_selector))
+            EC.visibility_of_all_elements_located((By.CSS_SELECTOR, css_selector))
         )
         return elements
     except Exception:

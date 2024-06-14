@@ -1,14 +1,13 @@
 import os
 from datetime import datetime
-from driver import install_web_driver
 
+from scrapers.driver import install_web_driver
 from scraper_utils.clicker_utils import (
     enter_input_by_id,
     click_button_by_css,
     click_next_button_by_css,
     click_element_by_data_test,
 )
-
 from scraper_utils.getter_utils import (
     get_all_elements_by_css,
     get_sub_element_by_tag,
@@ -21,7 +20,7 @@ class GlassdoorScraper:
         self.url: str = url
         self.curr_page: int = 1
         self.driver = install_web_driver(url)
-        
+
         self.get_company_overview()
         self.get_interview_page()
         self.login_glassdoor()
@@ -61,7 +60,10 @@ class GlassdoorScraper:
 
     def parse_interview_questions(self):
         """Parse the interview list on the current page"""
-        elements = get_all_elements_by_css(".mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00", self.driver)
+        elements = get_all_elements_by_css(
+            ".mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00",
+            self.driver,
+        )
 
         interview_objects = []
         for element in elements:
@@ -73,7 +75,7 @@ class GlassdoorScraper:
             question_data = {
                 "date_posted": date_field,
                 "experience": experience,
-                "question": question
+                "question": question,
             }
 
             interview_objects.append(question_data)
@@ -103,9 +105,3 @@ class GlassdoorScraper:
 
         scraper.close_driver()
         return questions
-
-
-if __name__ == "__main__":
-    company = "Google"
-    position = "Software Engineering Intern"
-    GlassdoorScraper.scrape_interview_questions(company, position)

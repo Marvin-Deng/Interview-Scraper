@@ -11,7 +11,3 @@ downloaded_files
 
 # Test Output
 output.txt
-
-# DB
-migrations
-db.sqlite3

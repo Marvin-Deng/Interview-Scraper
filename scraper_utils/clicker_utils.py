@@ -22,8 +22,7 @@ def enter_input_by_id(input_text: str, input_id: str, driver: WebDriver) -> None
         input.clear()
         input.send_keys(input_text)
     except TimeoutException:
-        print(
-            f"Timeout: Input with ID '{input_id}' not visible within the wait time.")
+        print(f"Timeout: Input with ID '{input_id}' not visible within the wait time.")
     except NoSuchElementException:
         print(f"Error: Input with ID '{input_id}' not found.")
 
@@ -34,7 +33,9 @@ def click_button_by_css(css_selector: str, driver: WebDriver) -> None:
     try:
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
-        print(f"Timeout: Button with css '{css_selector}' not clickable within the wait time.")
+        print(
+            f"Timeout: Button with css '{css_selector}' not clickable within the wait time."
+        )
     except NoSuchElementException:
         print(f"Error: Button with css '{css_selector}' not found.")
 
@@ -45,7 +46,9 @@ def click_element_by_data_test(data_test_value: str, driver: WebDriver) -> None:
         css_selector = f'[data-test="{data_test_value}"]'
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
-        print(f"Timeout: Element with data-test='{data_test_value}' not clickable within the wait time.")
+        print(
+            f"Timeout: Element with data-test='{data_test_value}' not clickable within the wait time."
+        )
     except NoSuchElementException:
         print(f"Error: Element with data-test='{data_test_value}' not found.")
 
@@ -59,12 +62,12 @@ def click_next_button_by_css(css_selector: str, driver: WebDriver) -> None:
         raise Exception(f"Timeout occured while waiting to click button: {e}")
     except Exception as e:
         raise Exception(f"Clicking button failed with error: {e}")
-        
+
 
 def export_formatted_html(soup: BeautifulSoup, file_name: str = "output.txt") -> None:
     """Exports formatted HTML from a BeautifulSoup object to a text file."""
     formatted_html = soup.prettify()
 
-    with open(file_name, 'w', encoding='utf-8') as file:
+    with open(file_name, "w", encoding="utf-8") as file:
         file.write(formatted_html)
     print(f"Formatted HTML has been written to {file_name}")
