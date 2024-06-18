@@ -94,7 +94,7 @@ class GlassdoorScraper:
         return interview_objects
 
     @staticmethod
-    def scrape_interview_questions(company: str, position: str) -> None:
+    def scrape_company_questions(company: str, position: str) -> None:
         questions = []
         search_url = f"https://www.glassdoor.com/Search/results.htm?keyword={company}"
         scraper = GlassdoorScraper(search_url)

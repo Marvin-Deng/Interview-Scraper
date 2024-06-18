@@ -1,4 +1,5 @@
 # Interview Question Web Scraper
+
 Script for scraping interview questions from Glassdoor
 
 ## Setup
@@ -37,7 +38,12 @@ PASSWORD=
 ## Running Scraper
 
 ```shell
-python3 main.py
+options:
+    -c, --company: Company name to search on Glassdoor
+    -p, --position: Position to search interview questions for
+
+# Example:
+python3 main.py -c "Google" -p "Software Engineering Intern"
 ```
 
 ## Updating requirements
