@@ -12,3 +12,5 @@ downloaded_files
 # Output
 *.txt
 *.csv
+*.docx
+*.pdf

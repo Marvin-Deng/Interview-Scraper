@@ -2,7 +2,12 @@ import os
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from scrapers.driver import install_web_driver
-from scrapers.exporter import export_to_csv, export_to_txt, export_to_docx
+from scrapers.exporter import (
+    export_to_csv,
+    export_to_txt,
+    export_to_docx,
+    export_to_pdf,
+)
 from scraper_utils.clicker_utils import (
     enter_input_by_id,
     click_button_by_css,
@@ -154,6 +159,8 @@ class GlassdoorScraper:
                 export_to_txt(company=company, headers=headers, questions=questions)
             elif export_file == "docx":
                 export_to_docx(company=company, headers=headers, questions=questions)
+            elif export_file == "pdf":
+                export_to_pdf(company=company, headers=headers, questions=questions)
 
         except Exception as e:
             print(e)
