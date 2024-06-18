@@ -2,6 +2,7 @@ import os
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from scrapers.driver import install_web_driver
+from scrapers.exporter import export_to_csv
 from scraper_utils.clicker_utils import (
     enter_input_by_id,
     click_button_by_css,
@@ -130,7 +131,7 @@ class GlassdoorScraper:
             raise
 
     @staticmethod
-    def scrape_company_questions(company: str, position: str) -> None:
+    def scrape_company_questions(company: str, position: str, export_file: str) -> None:
         questions = []
         search_url = f"https://www.glassdoor.com/Search/results.htm?keyword={company}"
         scraper = GlassdoorScraper(search_url)
@@ -149,5 +150,10 @@ class GlassdoorScraper:
                     break
         finally:
             scraper._close_driver()
+            
+        try:
+            if export_file == "csv":
+                export_to_csv(company, questions)
 
-        return questions
+        except Exception as e:
+            print(e)

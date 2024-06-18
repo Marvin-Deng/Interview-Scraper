@@ -9,5 +9,6 @@ venv
 chromedriver.exe
 downloaded_files
 
-# Test Output
-output.txt
+# Output
+*.txt
+*.csv

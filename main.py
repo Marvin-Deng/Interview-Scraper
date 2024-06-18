@@ -21,12 +21,23 @@ def main():
         required=True,
         help="Position to search interview questions for",
     )
+    parser.add_argument(
+        "-e",
+        "--export",
+        type=str,
+        choices=["txt", "csv"],
+        required=True,
+        help="Format to export the interview questions. Options: 'txt' or 'csv'",
+    )
 
     args = parser.parse_args()
     company = args.company
     position = args.position
+    export_file = args.export
 
-    GlassdoorScraper.scrape_company_questions(company=company, position=position)
+    GlassdoorScraper.scrape_company_questions(
+        company=company, position=position, export_file=export_file
+    )
 
 
 if __name__ == "__main__":
