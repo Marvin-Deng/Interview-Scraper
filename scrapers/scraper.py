@@ -2,7 +2,7 @@ import os
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from scrapers.driver import install_web_driver
-from scrapers.exporter import export_to_csv, export_to_txt
+from scrapers.exporter import export_to_csv, export_to_txt, export_to_docx
 from scraper_utils.clicker_utils import (
     enter_input_by_id,
     click_button_by_css,
@@ -96,7 +96,6 @@ class GlassdoorScraper:
                 self.driver,
                 ".InterviewContainer__InterviewDetailsStyles__interviewContainer",
             )
-
             interview_objects = []
             for element in elements:
                 date_str = get_sub_element_by_css(
@@ -113,18 +112,13 @@ class GlassdoorScraper:
                     element,
                     ".interview-details__interview-details-module__interviewText",
                 )
-
                 question_data = {
                     "date_posted": date_str,
                     "user": user,
                     "experience": experience,
                     "question": question,
                 }
-
                 interview_objects.append(question_data)
-
-            print(interview_objects)
-            print(len(interview_objects))
             return interview_objects
         except (NoSuchElementException, TimeoutException) as e:
             print(f"Failed to parse interview questions: {e}")
@@ -158,6 +152,8 @@ class GlassdoorScraper:
                 export_to_csv(company=company, headers=headers, questions=questions)
             elif export_file == "txt":
                 export_to_txt(company=company, headers=headers, questions=questions)
+            elif export_file == "docx":
+                export_to_docx(company=company, headers=headers, questions=questions)
 
         except Exception as e:
             print(e)

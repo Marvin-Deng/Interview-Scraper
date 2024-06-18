@@ -41,7 +41,7 @@ PASSWORD=
 options:
     -c, --company: Company name to search on Glassdoor
     -p, --position: Position to search interview questions for
-    -e, --export: Format to export the interview questions. Options: 'txt' or 'csv'
+    -e, --export: Format to export the interview questions. Options: 'txt', 'docx', or 'csv'
 
 # Example:
 python3 main.py -c "Google" -p "Software Engineering Intern" -e "csv"

@@ -25,9 +25,9 @@ def main():
         "-e",
         "--export",
         type=str,
-        choices=["txt", "csv"],
+        choices=["txt", "docx", "csv"],
         required=True,
-        help="Format to export the interview questions. Options: 'txt' or 'csv'",
+        help="Format to export the interview questions. Options: 'txt', 'docx', or 'csv'",
     )
 
     args = parser.parse_args()
