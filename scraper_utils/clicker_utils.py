@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,8 +6,6 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 from .helper_utils import parse_css_selector
 from .wait_utils import (
-    wait_elements_visible_by_css,
-    wait_elements_visible_by_id,
     wait_elements_clickable_by_css,
 )
 
@@ -62,12 +59,3 @@ def click_next_button_by_css(css_selector: str, driver: WebDriver) -> None:
         raise Exception(f"Timeout occured while waiting to click button: {e}")
     except Exception as e:
         raise Exception(f"Clicking button failed with error: {e}")
-
-
-def export_formatted_html(soup: BeautifulSoup, file_name: str = "output.txt") -> None:
-    """Exports formatted HTML from a BeautifulSoup object to a text file."""
-    formatted_html = soup.prettify()
-
-    with open(file_name, "w", encoding="utf-8") as file:
-        file.write(formatted_html)
-    print(f"Formatted HTML has been written to {file_name}")

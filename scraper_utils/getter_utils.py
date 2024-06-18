@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from .helper_utils import parse_css_selector
 
 
-def get_all_elements_by_css(css_selector: str, driver: WebDriver) -> list:
+def get_all_elements_by_css(driver: WebDriver, css_selector: str) -> list:
     """Return all elements that match the css selector."""
 
     css_selector = parse_css_selector(css_selector)
