@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 
 from scrapers.driver import install_web_driver
 from scraper_utils.clicker_utils import (
@@ -10,7 +9,6 @@ from scraper_utils.clicker_utils import (
 )
 from scraper_utils.getter_utils import (
     get_all_elements_by_css,
-    get_sub_element_by_tag,
     get_sub_element_by_css,
 )
 
@@ -31,7 +29,7 @@ class GlassdoorScraper:
             self.driver.quit()
             print("Quitted!")
 
-    def get_company_overview(self):
+    def get_company_overview(self) -> None:
         click_button_by_css("h3.d-none.d-sm-block", self.driver)
         print("In company overview")
 
@@ -58,22 +56,23 @@ class GlassdoorScraper:
         click_next_button_by_css('[aria-label="Next"]', self.driver)
         self.curr_page += 1
 
-    def parse_interview_questions(self):
+    def parse_interview_questions(self) -> list:
         """Parse the interview list on the current page"""
         elements = get_all_elements_by_css(
-            ".mt-0.mb-0.my-md-std.css-l6fu5w.p-std.gd-ui-module.css-rntt2a.ec4dwm00",
+            ".InterviewContainer__InterviewDetailsStyles__interviewContainer",
             self.driver,
         )
 
         interview_objects = []
         for element in elements:
-            date_str = get_sub_element_by_tag(element, "time")
-            experience = get_sub_element_by_css(element, "css-w00cnv mt-xsm mb-std")
-            question = get_sub_element_by_css(element, "d-inline-block mb-sm")
-            date_field = datetime.strptime(date_str, "%b %d, %Y").strftime("%Y-%m-%d")
+            date_str = get_sub_element_by_css(element, ".timestamp__timestamp-module__reviewDate")
+            user = get_sub_element_by_css(element,".interview-details__interview-details-module__userLine")
+            experience = get_sub_element_by_css(element, ".truncated-text__truncated-text-module__truncate.interview-details__interview-details-module__textStyle")
+            question = get_sub_element_by_css(element, ".interview-details__interview-details-module__interviewText")
 
             question_data = {
-                "date_posted": date_field,
+                "date_posted": date_str,
+                "user": user,
                 "experience": experience,
                 "question": question,
             }

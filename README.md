@@ -19,10 +19,19 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-3 Install requirements
+3. Install requirements
 
 ```shell
 pip install -r requirements.txt
+```
+
+4. Add Glassdoor login credentials to a .env file
+
+```shell
+# .env
+
+EMAIL=
+PASSWORD=
 ```
 
 ## Running Scraper
