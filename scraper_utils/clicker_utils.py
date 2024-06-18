@@ -19,9 +19,11 @@ def enter_input_by_id(input_text: str, input_id: str, driver: WebDriver) -> None
         input.clear()
         input.send_keys(input_text)
     except TimeoutException:
-        print(f"Timeout: Input with ID '{input_id}' not visible within the wait time.")
+        raise Exception(
+            f"Timeout: Input with ID '{input_id}' not visible within the wait time."
+        )
     except NoSuchElementException:
-        print(f"Error: Input with ID '{input_id}' not found.")
+        raise Exception(f"Error: Input with ID '{input_id}' not found.")
 
 
 def click_button_by_css(css_selector: str, driver: WebDriver) -> None:
@@ -30,11 +32,11 @@ def click_button_by_css(css_selector: str, driver: WebDriver) -> None:
     try:
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
-        print(
+        raise Exception(
             f"Timeout: Button with css '{css_selector}' not clickable within the wait time."
         )
     except NoSuchElementException:
-        print(f"Error: Button with css '{css_selector}' not found.")
+        raise Exception(f"Error: Button with css '{css_selector}' not found.")
 
 
 def click_element_by_data_test(data_test_value: str, driver: WebDriver) -> None:
@@ -43,11 +45,11 @@ def click_element_by_data_test(data_test_value: str, driver: WebDriver) -> None:
         css_selector = f'[data-test="{data_test_value}"]'
         wait_elements_clickable_by_css(css_selector, driver)
     except TimeoutException:
-        print(
+        raise Exception(
             f"Timeout: Element with data-test='{data_test_value}' not clickable within the wait time."
         )
     except NoSuchElementException:
-        print(f"Error: Element with data-test='{data_test_value}' not found.")
+        raise Exception(f"Error: Element with data-test='{data_test_value}' not found.")
 
 
 def click_next_button_by_css(css_selector: str, driver: WebDriver) -> None:
